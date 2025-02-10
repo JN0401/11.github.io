@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>出口退税申报流程</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            overflow: hidden;
+            background: #fff;
+            position: relative;
+        }
+
+        .fullscreen-img {
+            width: 100vw;
+            height: 100vh;
+            object-fit: contain;
+            cursor: pointer;
+            transition: opacity 0.5s;
+        }
+
+        .text-box {
+            position: absolute;
+            width: 200px;
+            height: 40px;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            font-size: 14px;
+            font-family: 'Microsoft YaHei', sans-serif;
+            resize: none;
+            outline: none;
+            display: none;
+            z-index: 100;
+        }
+
+        .text-box textarea {
+            width: 178%;
+            height: 160%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 5px;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .draggable {
+            cursor: move;
+        }
+
+        /* 按钮容器样式 */
+        .button-container {
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            gap: 20px; /* 按钮间距 */
+            width: 100%;
+            bottom: 50px; /* 固定在页面底部上方50px */
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 200;
+            display: none; /* 默认隐藏 */
+        }
+
+        .button-container button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .button-container button:hover {
+            background-color: #005bb5;
+        }
+
+        .button-container.hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <img src="1.png" class="fullscreen-img" id="mainImage" alt="出口退税流程演示" title="点击进入下一步">
+    <audio id="mouseClickSound" src="鼠标声.mp3" preload="auto" class="hidden"></audio>
+
+    <!-- 文本框 -->
+    <div class="text-box draggable" id="textBox1" style="top: 150px; left: 150px;">
+        <textarea placeholder="请输入"></textarea>
+    </div>
+    <div class="text-box draggable" id="textBox2" style="top: 150px; left: 350px;">
+        <textarea placeholder="请输入"></textarea>
+    </div>
+    <div class="text-box draggable" id="textBox3" style="top: 150px; left: 550px;">
+        <textarea placeholder="请输入"></textarea>
+    </div>
+    <div class="text-box draggable" id="textBox4" style="top: 250px; left: 150px;">
+        <textarea placeholder="请输入"></textarea>
+    </div>
+    <div class="text-box draggable" id="textBox5" style="top: 250px; left: 350px;">
+        <textarea placeholder="请输入"></textarea>
+    </div>
+    <div class="text-box draggable" id="textBox6" style="top: 250px; left: 550px;">
+        <textarea placeholder="请输入"></textarea>
+    </div>
+    <div class="text-box draggable" id="textBox7" style="top: 350px; left: 150px;">
+        <textarea placeholder="请输入"></textarea>
+    </div>
+    <div class="text-box draggable" id="textBox8" style="top: 350px; left: 350px;">
+        <textarea placeholder="请输入"></textarea>
+    </div>
+    <div class="text-box draggable" id="textBox9" style="top: 350px; left: 550px;">
+        <textarea placeholder="请输入"></textarea>
+    </div>
+    <div class="text-box draggable" id="textBox10" style="top: 450px; left: 150px;">
+        <textarea placeholder="请输入"></textarea>
+    </div>
+    <div class="text-box draggable" id="textBox11" style="top: 450px; left: 350px;">
+        <textarea placeholder="请输入"></textarea>
+    </div>
+    <div class="text-box draggable" id="textBox12" style="top: 450px; left: 550px;">
+        <textarea placeholder="请输入"></textarea>
+    </div>
+    <div class="text-box draggable" id="textBox13" style="top: 550px; left: 150px;">
+        <textarea placeholder="请输入"></textarea>
+    </div>
+    <div class="text-box draggable" id="textBox14" style="top: 550px; left: 350px;">
+        <textarea placeholder="请输入"></textarea>
+    </div>
+    <div class="text-box draggable" id="textBox15" style="top: 550px; left: 550px;">
+        <textarea placeholder="请输入"></textarea>
+    </div>
+    <div class="text-box draggable" id="textBox16" style="top: 650px; left: 150px;">
+        <textarea placeholder="请输入"></textarea>
+    </div>
+    <div class="text-box draggable" id="textBox17" style="top: 650px; left: 350px;">
+        <textarea placeholder="请输入"></textarea>
+    </div>
+    <div class="text-box draggable" id="textBox18" style="top: 650px; left: 550px;">
+        <textarea placeholder="请输入"></textarea>
+    </div>
+    <div class="text-box draggable" id="textBox19" style="top: 750px; left: 150px;">
+        <textarea placeholder="请输入"></textarea>
+    </div>
+   
+
+    <!-- 按钮容器 -->
+    <div class="button-container" id="buttonContainer">
+        <button id="saveButton">保存</button>
+        <button id="submitButton">提交</button>
+    </div>
+
+    <script>
+        const stepSequence = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+        let currentStepIndex = 0;
+        const mainImage = document.getElementById('mainImage');
+        const textBoxes = document.querySelectorAll('.text-box');
+        const buttonContainer = document.getElementById('buttonContainer');
+        const submitButton = document.getElementById('submitButton');
+        const mouseClickSound = document.getElementById('mouseClickSound');
+
+        // 导航到下一步
+        function navigateToNext() {
+            currentStepIndex = (currentStepIndex + 1) % stepSequence.length;
+            const nextStep = stepSequence[currentStepIndex];
+
+            // 处理文本框和按钮显示
+            if (nextStep === 6) {
+                textBoxes.forEach(textBox => textBox.style.display = 'block');
+                buttonContainer.style.display = 'flex'; // 显示按钮
+            } else {
+                textBoxes.forEach(textBox => textBox.style.display = 'none');
+                buttonContainer.style.display = 'none'; // 隐藏按钮
+            }
+
+            // 图片切换动画
+            mainImage.style.opacity = 0;
+            setTimeout(() => {
+                mainImage.src = `${nextStep}.png`;
+                mainImage.style.opacity = 1;
+                // 播放鼠标声
+                mouseClickSound.currentTime = 0; // 从头开始播放
+                mouseClickSound.play();
+            }, 100);
+        }
+
+        // 图片点击事件
+        mainImage.addEventListener('click', function (e) {
+            if (!mainImage.contains(e.target) || e.target.tagName !== 'TEXTAREA') {
+                navigateToNext();
+            }
+        });
+
+        // 提交按钮点击事件
+        submitButton.addEventListener('click', function () {
+            if (stepSequence[currentStepIndex] === 6) {
+                navigateToNext();
+            }
+        });
+
+        // 键盘导航
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                navigateToNext();
+            }
+            if (e.key === 'ArrowLeft') {
+                currentStepIndex = (currentStepIndex - 2 + stepSequence.length) % stepSequence.length;
+                navigateToNext();
+            }
+        });
+
+        // 拖拽功能
+        let offsetX, offsetY, draggedElement = null;
+
+        function startDrag(e) {
+            if (e.target.classList.contains('draggable')) {
+                draggedElement = e.target;
+                offsetX = e.clientX - draggedElement.offsetLeft;
+                offsetY = e.clientY - draggedElement.offsetTop;
+            }
+        }
+
+        function stopDrag() {
+            draggedElement = null;
+            saveTextBoxPositions();
+        }
+
+        function drag(e) {
+            if (draggedElement) {
+                e.preventDefault();
+                draggedElement.style.left = (e.clientX - offsetX) + 'px';
+                draggedElement.style.top = (e.clientY - offsetY) + 'px';
+            }
+        }
+
+        // 绑定拖拽事件
+        textBoxes.forEach(textBox => {
+            textBox.addEventListener('mousedown', startDrag);
+            textBox.addEventListener('mouseup', stopDrag);
+            textBox.addEventListener('mousemove', drag);
+        });
+
+        // 保存文本框位置
+        function saveTextBoxPositions() {
+            textBoxes.forEach(textBox => {
+                localStorage.setItem(textBox.id, JSON.stringify({
+                    left: textBox.style.left,
+                    top: textBox.style.top
+                }));
+            });
+        }
+
+        // 加载文本框位置
+        function loadTextBoxPositions() {
+            textBoxes.forEach(textBox => {
+                const position = JSON.parse(localStorage.getItem(textBox.id));
+                if (position) {
+                    textBox.style.left = position.left;
+                    textBox.style.top = position.top;
+                }
+            });
+        }
+
+        // 初始化
+        window.addEventListener('load', () => {
+            loadTextBoxPositions();
+            if (stepSequence[currentStepIndex] === 6) {
+                textBoxes.forEach(textBox => textBox.style.display = 'block');
+                buttonContainer.style.display = 'flex'; // 显示按钮
+            } else {
+                textBoxes.forEach(textBox => textBox.style.display = 'none');
+                buttonContainer.style.display = 'none'; // 隐藏按钮
+            }
+        });
+
+        window.addEventListener('beforeunload', saveTextBoxPositions);
+    </script>
+</body>
+</html>
